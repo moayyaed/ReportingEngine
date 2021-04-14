@@ -27,7 +27,8 @@ namespace ReportingEngine
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Done");
+            ReportWindow window = new ReportWindow();
+            window.ShowDialog();
         }
     }
 }

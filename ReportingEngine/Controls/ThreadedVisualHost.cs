@@ -5,7 +5,7 @@ using System.Windows.Media;
 using System.Threading;
 using System.Windows;
 
-namespace ReportEngine.Controls
+namespace ReportingEngine.Controls
 {
     /// <summary>
     /// Delegate for create content

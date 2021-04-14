@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using System.Windows;
 
-namespace ReportEngine.Controls
+namespace ReportingEngine.Controls
 {
     /// <summary>
     /// Visual target presentation source

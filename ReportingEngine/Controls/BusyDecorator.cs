@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 
-namespace ReportEngine.Controls
+namespace ReportingEngine.Controls
 {
     [StyleTypedProperty(Property = "BusyStyle", StyleTargetType = typeof(Control))]
     public class BusyDecorator : Decorator
