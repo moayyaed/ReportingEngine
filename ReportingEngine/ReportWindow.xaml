@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:c="clr-namespace:ReportingEngine.Controls"
         xmlns:local="clr-namespace:ReportingEngine"
-        mc:Ignorable="d"
+        mc:Ignorable="d" FontFamily="Calibri"
         Title="Report" Height="20cm" Width="21cm" 
         ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen"
-        FontSize="13">
+        FontSize="13" Activated="Window_Activated">
     <Grid>
         <c:BusyDecorator x:Name="busyDecorator" IsBusyIndicatorHidden="False">
             <DocumentViewer Name="documentViewer"  >
@@ -29,18 +29,12 @@
                                             </Grid.RowDefinitions>
                                             <ToolBar ToolBarTray.IsLocked="True" Style="{StaticResource Toolbar}"
                  KeyboardNavigation.TabNavigation="Continue"  HorizontalAlignment="Right" HorizontalContentAlignment="Right">
-
-                                                <Button Style="{StaticResource ReportButton}"
-                  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="PDF"  />
-                                                <Button Style="{StaticResource ReportButton}"
-                  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="CSV"  />
-                                                <Button Style="{StaticResource ReportButton}" 
-                                                        Command="ApplicationCommands.Print"
-                  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                  Content="Print" />
-                                                <Button Style="{StaticResource ReportButton}" IsCancel="True"
-                  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="Exit"  />
-
+                                                <Button Style="{StaticResource ReportButton}" Command="IncreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="+" />
+                                                <Button Style="{StaticResource ReportButton}" Command="DecreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="-" />
+                                                <Button Style="{StaticResource ReportButton}" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="PDF"  />
+                                                <Button Style="{StaticResource ReportButton}" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="CSV"  />
+                                                <Button Style="{StaticResource ReportButton}" Command="ApplicationCommands.Print" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="Print" />
+                                                <Button Style="{StaticResource ReportButton}" IsCancel="True" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="Exit"  />
 
                                             </ToolBar>
 

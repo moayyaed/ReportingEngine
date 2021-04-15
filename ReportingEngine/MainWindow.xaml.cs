@@ -27,7 +27,8 @@ namespace ReportingEngine
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
-            ReportWindow window = new ReportWindow();
+            Repository repository = new Repository();
+            ReportWindow window = new ReportWindow(repository.GetData());
             window.ShowDialog();
         }
     }
