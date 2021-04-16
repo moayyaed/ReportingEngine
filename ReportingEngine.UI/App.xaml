@@ -1,9 +1,9 @@
-﻿<Application x:Class="ReportingEngine.App"
+﻿<Application x:Class="ReportingEngine.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ReportingEngine"
-             >
+             xmlns:local="clr-namespace:ReportingEngine.UI"
+             StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+         
     </Application.Resources>
 </Application>

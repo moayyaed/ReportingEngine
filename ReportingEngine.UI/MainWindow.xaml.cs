@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ReportingEngine
+namespace ReportingEngine.UI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -25,11 +25,10 @@ namespace ReportingEngine
             InitializeComponent();
         }
 
-        private void BtnReport_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Repository repository = new Repository();
-            ReportWindow window = new ReportWindow(repository.GetData());
-            window.ShowDialog();
+            ReportingGenerator reportingGenerator = new ReportingGenerator();
+            reportingGenerator.GenerateReport(new Repository().GetData(), "", DateTime.Now, "");
         }
     }
 }

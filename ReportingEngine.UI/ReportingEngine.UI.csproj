@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E9CBB189-169B-44B1-84A0-38D6E5667C8F}</ProjectGuid>
+    <ProjectGuid>{346C70B3-1BF0-418A-8A36-C01C883F5622}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ReportingEngine</RootNamespace>
-    <AssemblyName>ReportingEngine</AssemblyName>
+    <RootNamespace>ReportingEngine.UI</RootNamespace>
+    <AssemblyName>ReportingEngine.UI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,7 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -52,77 +51,23 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\BusyDecorator.cs" />
-    <Compile Include="Controls\ThreadedVisualHost.cs" />
-    <Compile Include="Controls\VisualTargetPresentationSource.cs" />
-    <Compile Include="Interfaces\IAggregateValue.cs" />
-    <Compile Include="Interfaces\IChart.cs" />
-    <Compile Include="Interfaces\IDocumentCondition.cs" />
-    <Compile Include="Interfaces\IHasValue.cs" />
-    <Compile Include="Interfaces\IInlineContextValue.cs" />
-    <Compile Include="Interfaces\IInlineDocumentValue.cs" />
-    <Compile Include="Interfaces\IInlinePropertyValue.cs" />
-    <Compile Include="Interfaces\IPropertyValue.cs" />
-    <Compile Include="Interfaces\ITableCellValue.cs" />
-    <Compile Include="Interfaces\ITableRowForDataTable.cs" />
-    <Compile Include="Interfaces\ITableRowForDynamicDataTable.cs" />
-    <Compile Include="Interfaces\ITableRowForDynamicHeader.cs" />
-    <Compile Include="ReportingGenerator.cs" />
-    <Compile Include="ReportWindow.xaml.cs">
-      <DependentUpon>ReportWindow.xaml</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Usages\DataRowBoundEventArgs.cs" />
-    <Compile Include="Usages\DocumentWalker.cs" />
-    <Compile Include="Usages\ImageErrorEventArgs.cs" />
-    <Compile Include="Usages\ImageEventArgs.cs" />
-    <Compile Include="Usages\InlineAggregateValue.cs" />
-    <Compile Include="Usages\InlineContextValue.cs" />
-    <Compile Include="Usages\InlineHasValue.cs" />
-    <Compile Include="Usages\InlinePropertyValue.cs" />
-    <Compile Include="Usages\InlineTableCellValue.cs" />
-    <Compile Include="Usages\MultipleReportPaginator.cs" />
-    <Compile Include="Usages\ReportContextValueType.cs" />
-    <Compile Include="Usages\ReportData.cs" />
-    <Compile Include="Usages\ReportDocument.cs" />
-    <Compile Include="Usages\ReportFooter.cs" />
-    <Compile Include="Usages\ReportHeader.cs" />
-    <Compile Include="Usages\ReportingException.cs" />
-    <Compile Include="Usages\ReportPaginator.cs" />
-    <Compile Include="Usages\ReportPaginatorDynamicCache.cs" />
-    <Compile Include="Usages\ReportPaginatorStaticCache.cs" />
-    <Compile Include="Usages\ReportProperties.cs" />
-    <Compile Include="Usages\TableRowForDataTable.cs" />
-    <Compile Include="Usages\TableRowForDynamicDataTable.cs" />
-    <Compile Include="Usages\TableRowForDynamicHeader.cs" />
-    <Compile Include="Usages\XamlHelper.cs" />
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="ReportWindow.xaml">
-      <SubType>Designer</SubType>
+    <Compile Include="Repository.cs" />
+    <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Page>
-    <Content Include="Templates\ReportFormat.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Page Include="Themes\BusyDecorator.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -150,6 +95,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ReportingEngine\ReportingEngine.csproj">
+      <Project>{e9cbb189-169b-44b1-84a0-38d6e5667c8f}</Project>
+      <Name>ReportingEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
