@@ -15,12 +15,20 @@ namespace ReportingEngine
     /// </summary>
     public partial class ReportWindow : Window
     {
+
+        #region Properties
+
         public DataTable ReportRawData { get; set; }
-        
-        public ReportWindow(DataTable reportRawData)
+        public DateTime? ReportCreationDate { get; set; }
+        public string ReportName { get; set; }
+        public string ReportCreator { get; set; }
+
+        #endregion
+
+
+        public ReportWindow()
         {
             InitializeComponent();
-            ReportRawData = reportRawData;
         }
 
         private void PageNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -57,7 +65,7 @@ namespace ReportingEngine
                     reportInformation.Columns.Add("Name");
                     reportInformation.Columns.Add("CreatedBy");
 
-                    reportInformation.Rows.Add(new object[] { DateTime.Now.ToString("dd-MM-yyyy"), "Test Name", "Hussain" });
+                    reportInformation.Rows.Add(new object[] { (ReportCreationDate ?? DateTime.Now).ToString("dd-MM-yyyy"), ReportName ?? "NA", ReportCreator ?? "NA" });
                     data.DataTables.Add(reportInformation);
 
                     DataTable reportHeaders = new DataTable("ReportHeaders");
@@ -69,14 +77,14 @@ namespace ReportingEngine
                     {
                         reportHeaders.Rows.Add(new object[] { col.ToString() });
                     }
-                    
-                   
+
+
                     data.DataTables.Add(reportHeaders);
                     data.DataTables.Add(reportData);
 
                     XpsDocument xps = reportDocument.CreateXpsDocument(data);
                     documentViewer.Document = xps.GetFixedDocumentSequence();
-                    
+
                     // show the elapsed time in window title
                     Title += " - generated in " + (DateTime.Now - dateTimeStart).TotalMilliseconds + "ms";
                 }
