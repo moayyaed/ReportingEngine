@@ -1,15 +1,20 @@
-﻿using ReportingEngine.Constants;
+﻿using Microsoft.Win32;
+using ReportingEngine.Constants;
 using ReportingEngine.Usages;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Documents.Serialization;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Windows.Xps.Packaging;
+using System.Windows.Xps.Serialization;
 
 namespace ReportingEngine
 {
@@ -56,7 +61,7 @@ namespace ReportingEngine
         #region Report Window Activation
 
         private bool _firstActivated = true;
-
+        XpsDocument xpsDoc;
         private void Window_Activated(object sender, EventArgs e)
         {
             if (!_firstActivated) return;
@@ -107,6 +112,7 @@ namespace ReportingEngine
 
                     //Generate Report
                     XpsDocument xps = reportDocument.CreateXpsDocument(data);
+                    xpsDoc = reportDocument.CreateXpsDocument(data);
                     documentViewer.Document = xps.GetFixedDocumentSequence();
 
                 }
@@ -170,7 +176,49 @@ namespace ReportingEngine
         {
             return centimeter * 37.7952755905512;
         }
-        
+
+        #endregion
+
+        #region PDF Generation
+
+        private void PDF_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Title = "Save as PDF",
+                    DefaultExt = "pdf",
+                    Filter = "Pdf Files|*.pdf",
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    PrintFile(saveFileDialog.FileName);
+                    MessageBox.Show($"PDF File saved at {saveFileDialog.FileName}", "PDF File Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error in PDF generation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void PrintFile(string pdfOutputPath)
+        {
+           
+            var memoryStream = new MemoryStream();
+            XpsSerializerFactory serializerFactory = new XpsSerializerFactory();
+            SerializerWriter serializerWriter = serializerFactory.CreateSerializerWriter(memoryStream);
+            serializerWriter.Write(xpsDoc.GetFixedDocumentSequence());
+            var bytes = memoryStream.ToArray();
+
+            // Print to PDF
+            PdfFilePrinter.PrintXpsToPdf(bytes, pdfOutputPath, "Document title");
+        }
+
         #endregion
     }
 }
