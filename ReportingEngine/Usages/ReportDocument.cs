@@ -47,6 +47,7 @@ namespace ReportingEngine.Usages
         public double PageHeight
         {
             get { return _pageHeight; }
+            set { _pageHeight = value; }
         }
 
         private double _pageWidth = double.NaN;
@@ -56,7 +57,18 @@ namespace ReportingEngine.Usages
         public double PageWidth
         {
             get { return _pageWidth; }
+            set { _pageWidth = value; }
+
         }
+
+        private double _columnWidth;
+
+        public double ColumnWidth
+        {
+            get { return _columnWidth; }
+            set { _columnWidth = value; }
+        }
+
 
         private string _reportName = "";
         /// <summary>
@@ -174,8 +186,8 @@ namespace ReportingEngine.Usages
             if (res.PageWidth == double.NaN) throw new ArgumentException("Flow document must have a specified page width");
 
             // remember original values
-            _pageHeight = res.PageHeight;
-            _pageWidth = res.PageWidth;
+           // _pageHeight = res.PageHeight;
+            //_pageWidth = res.PageWidth;
 
             // search report properties
             DocumentWalker walker = new DocumentWalker();
@@ -199,7 +211,8 @@ namespace ReportingEngine.Usages
 
             // make height smaller to have enough space for page header and page footer
             res.PageHeight = _pageHeight - _pageHeight * (PageHeaderHeight + PageFooterHeight) / 100d;
-
+            res.PageWidth = _pageWidth;
+            res.ColumnWidth = _columnWidth;
             // search image objects
             List<Image> images = new List<Image>();
             walker.Tag = images;

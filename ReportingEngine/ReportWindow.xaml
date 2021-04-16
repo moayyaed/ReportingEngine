@@ -52,7 +52,7 @@
     </Window.Resources>
     <Grid>
         <c:BusyDecorator x:Name="busyDecorator" IsBusyIndicatorHidden="False">
-            <DocumentViewer Name="documentViewer"  >
+            <DocumentViewer Name="documentViewer" >
                 <DocumentViewer.Style>
                     <Style TargetType="{x:Type DocumentViewer}">
                         <Setter Property="Template">

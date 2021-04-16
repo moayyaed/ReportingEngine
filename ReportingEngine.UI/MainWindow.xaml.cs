@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using ReportingEngine.Constants;
 
 namespace ReportingEngine.UI
 {
@@ -16,7 +18,15 @@ namespace ReportingEngine.UI
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ReportingGenerator reportingGenerator = new ReportingGenerator();
-            reportingGenerator.GenerateReport(new Repository().GetData(),"My Report", DateTime.Now, "Hussain");
+            reportingGenerator.GenerateReport(new Repository().GetData(), "My Report", DateTime.Now, "Hussain", PageSize.A4, Orientation.Vertical);
+            //List<string> headers = new List<string>
+            //{
+            //    "نام",
+            //    "پتہ",
+            //    "شھر",
+            //};
+            //reportingGenerator.GenerateReport(new Repository().GetData(), "میرا رپورٹ", DateTime.Now, "حسین", PageSize.A4, Orientation.Vertical, "رپورٹ نام", "رپورٹ تاریخ", "بنانے والا", headers);
+
         }
     }
 }

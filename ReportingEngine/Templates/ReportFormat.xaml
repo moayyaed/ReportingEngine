@@ -1,8 +1,9 @@
 ﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:usages="clr-namespace:ReportingEngine.Usages;assembly=ReportingEngine"
-              PageHeight="29.7cm" PageWidth="21cm" ColumnWidth="21cm" FontFamily="Calibri">
+               FontFamily="Calibri">
 
+    
     <usages:ReportProperties>
         <usages:ReportProperties.ReportName>ComplexReport</usages:ReportProperties.ReportName>
         <usages:ReportProperties.ReportTitle>Complex Report</usages:ReportProperties.ReportTitle>
@@ -33,8 +34,7 @@
 
     <Section Padding="10"  FontSize="18" BreakPageBefore="True">
 
-        <Table CellSpacing="0" >
-
+        <Table CellSpacing="5" >
             <Table.Resources>
                 <Style x:Key="headerinforowstyle" TargetType="{x:Type TableRowGroup}">
                     <Setter Property="FontWeight" Value="DemiBold"/>
@@ -44,8 +44,9 @@
                 <Style x:Key="headerdatarowstyle" TargetType="{x:Type TableRowGroup}">
                     <Setter Property="FontSize" Value="14"/>
                 </Style>
-
-               
+                <Style TargetType="{x:Type TableCell}">
+                    <Setter Property="LineHeight" Value="19"/>
+                </Style>
             </Table.Resources>
             <Table.Columns>
                 <TableColumn Width="*" />
@@ -53,24 +54,30 @@
                 <TableColumn Width="*" />
             </Table.Columns>
             <TableRowGroup Style="{StaticResource headerinforowstyle}">
-                <TableRow>
+                <usages:TableRowForDataTable TableName="ReportInformationHeaders">
                     <TableCell>
                         <Paragraph>
-                            <Bold>Report Creation Date</Bold>
+                            <Bold>
+                                <usages:InlineTableCellValue PropertyName="ReportCreationDateLabel"/>
+                            </Bold>
                         </Paragraph>
                     </TableCell>
                     <TableCell>
                         <Paragraph TextAlignment="Center">
-                            <Bold>Report Name</Bold>
+                            <Bold>
+                                <usages:InlineTableCellValue PropertyName="ReportNameLabel"/>
+                            </Bold>
                         </Paragraph>
                     </TableCell>
                     <TableCell>
                         <Paragraph TextAlignment="Right">
-                            <Bold>Created By</Bold>
+                            <Bold>
+                                <usages:InlineTableCellValue PropertyName="ReportCreatorLabel"/>
+                            </Bold>
                         </Paragraph>
                     </TableCell>
 
-                </TableRow>
+                </usages:TableRowForDataTable>
             </TableRowGroup>
             <TableRowGroup Style="{StaticResource headerdatarowstyle}">
                 <usages:TableRowForDataTable TableName="ReportInformation">
@@ -112,7 +119,7 @@
                     <Setter Property="BorderThickness" Value="0.01cm"/>
                 </Style>
             </Table.Resources>
-            
+
             <TableRowGroup Style="{StaticResource headerFooterRowStyle}">
                 <usages:TableRowForDynamicHeader TableName="ReportHeaders"/>
             </TableRowGroup>
@@ -124,7 +131,6 @@
         </Table>
 
     </Section>
-
 
 </FlowDocument>
 

@@ -1,7 +1,10 @@
-﻿using ReportingEngine.Usages;
+﻿using ReportingEngine.Constants;
+using ReportingEngine.Usages;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -15,6 +18,14 @@ namespace ReportingEngine
     /// </summary>
     public partial class ReportWindow : Window
     {
+        #region Initialize
+
+        public ReportWindow()
+        {
+            InitializeComponent();
+        }
+
+        #endregion
 
         #region Properties
 
@@ -22,14 +33,17 @@ namespace ReportingEngine
         public DateTime? ReportCreationDate { get; set; }
         public string ReportName { get; set; }
         public string ReportCreator { get; set; }
+        public string ReportCreationDateLabel { get; set; }
+        public string ReportNameLabel { get; set; }
+        public string ReportCreatorLabel { get; set; }
+        public List<string> ReportHeaders { get; set; }
+        public PageSize PageSize { get; set; }
+        public Orientation Orientation { get; set; }
+
 
         #endregion
 
-
-        public ReportWindow()
-        {
-            InitializeComponent();
-        }
+        #region Only Number Validation
 
         private void PageNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -37,6 +51,9 @@ namespace ReportingEngine
             e.Handled = regex.IsMatch(e.Text);
         }
 
+        #endregion
+
+        #region Report Window Activation
 
         private bool _firstActivated = true;
 
@@ -51,46 +68,50 @@ namespace ReportingEngine
                 try
                 {
                     ReportDocument reportDocument = new ReportDocument();
-
                     StreamReader reader = new StreamReader(new FileStream(@"Templates\ReportFormat.xaml", FileMode.Open, FileAccess.Read));
                     reportDocument.XamlData = reader.ReadToEnd();
                     reportDocument.XamlImagePath = Path.Combine(Environment.CurrentDirectory, @"Templates\");
                     reader.Close();
 
-                    DateTime dateTimeStart = DateTime.Now; // start time measure here
-
                     ReportData data = new ReportData();
-                    DataTable reportInformation = new DataTable("ReportInformation");
-                    reportInformation.Columns.Add("CreationDate");
-                    reportInformation.Columns.Add("Name");
-                    reportInformation.Columns.Add("CreatedBy");
 
-                    reportInformation.Rows.Add(new object[] { (ReportCreationDate ?? DateTime.Now).ToString("dd-MM-yyyy"), ReportName ?? "NA", ReportCreator ?? "NA" });
-                    data.DataTables.Add(reportInformation);
+                    //Report Information
+                    DataTable reportInformationTable = new DataTable("ReportInformation");
+                    reportInformationTable.Columns.Add("CreationDate");
+                    reportInformationTable.Columns.Add("Name");
+                    reportInformationTable.Columns.Add("CreatedBy");
+                    reportInformationTable.Rows.Add(new object[] { (ReportCreationDate ?? DateTime.Now).ToString("dd-MM-yyyy"), ReportName ?? "NA", ReportCreator ?? "NA" });
+                    data.DataTables.Add(reportInformationTable);
 
-                    DataTable reportHeaders = new DataTable("ReportHeaders");
-                    DataTable reportData = ReportRawData;
-                    reportData.TableName = "ReportData";
 
-                    reportHeaders.Columns.Add();
-                    foreach (var col in ReportRawData.Columns)
+                    //Report Information headers
+                    DataTable reportInformationHeadersTable = new DataTable("ReportInformationHeaders");
+                    reportInformationHeadersTable.Columns.AddRange(new DataColumn[] { new DataColumn("ReportCreationDateLabel"), new DataColumn("ReportNameLabel"), new DataColumn("ReportCreatorLabel") });
+                    reportInformationHeadersTable.Rows.Add(new object[] { ReportCreationDateLabel ?? "Report Creation Date", ReportNameLabel ?? "Report Name", ReportCreatorLabel ?? "Report Creator" });
+                    data.DataTables.Add(reportInformationHeadersTable);
+
+                    //Report Headers and Report Data
+                    DataTable reportHeadersTable = new DataTable("ReportHeaders");
+                    DataTable reportDataTable = ReportRawData;
+                    reportDataTable.TableName = "ReportData";
+                    reportHeadersTable.Columns.Add();
+                    foreach (var header in ReportHeaders ?? ReportRawData.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList())
                     {
-                        reportHeaders.Rows.Add(new object[] { col.ToString() });
+                        reportHeadersTable.Rows.Add(header);
                     }
+                    data.DataTables.Add(reportHeadersTable);
+                    data.DataTables.Add(reportDataTable);
 
+                    //Set Page Sizing
+                    SetPageSizing(reportDocument);
 
-                    data.DataTables.Add(reportHeaders);
-                    data.DataTables.Add(reportData);
-
+                    //Generate Report
                     XpsDocument xps = reportDocument.CreateXpsDocument(data);
                     documentViewer.Document = xps.GetFixedDocumentSequence();
 
-                    // show the elapsed time in window title
-                    Title += " - generated in " + (DateTime.Now - dateTimeStart).TotalMilliseconds + "ms";
                 }
                 catch (Exception ex)
                 {
-                    // show exception
                     MessageBox.Show(ex.Message + "\r\n\r\n" + ex.GetType() + "\r\n" + ex.StackTrace, ex.GetType().ToString(), MessageBoxButton.OK, MessageBoxImage.Stop);
                 }
                 finally
@@ -99,5 +120,57 @@ namespace ReportingEngine
                 }
             }));
         }
+
+        #endregion
+
+        #region Page Sizing and Orientation
+
+        void SetPageSizing(ReportDocument reportDocument)
+        {
+            switch (PageSize)
+            {
+                case PageSize.A4:
+                    switch (Orientation)
+                    {
+                        case Orientation.Vertical:
+                            reportDocument.PageHeight = CentimeterToPixel(29.7);
+                            reportDocument.PageWidth = reportDocument.ColumnWidth = CentimeterToPixel(21);
+                            break;
+                        case Orientation.Horizontal:
+                            reportDocument.PageHeight = CentimeterToPixel(21);
+                            reportDocument.PageWidth = reportDocument.ColumnWidth = CentimeterToPixel(29.7);
+                            break;
+                    }
+                    break;
+                case PageSize.A5:
+                    switch (Orientation)
+                    {
+                        case Orientation.Vertical:
+                            reportDocument.PageHeight = CentimeterToPixel(21);
+                            reportDocument.PageWidth = reportDocument.ColumnWidth = CentimeterToPixel(14.8);
+                            break;
+                        case Orientation.Horizontal:
+                            reportDocument.PageHeight = CentimeterToPixel(14.8);
+                            reportDocument.PageWidth = reportDocument.ColumnWidth = CentimeterToPixel(21);
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+
+        #endregion
+
+        #region Centimeter to Pixel Converter
+
+        double CentimeterToPixel(double centimeter)
+        {
+            return centimeter * 37.7952755905512;
+        }
+        
+        #endregion
     }
 }
