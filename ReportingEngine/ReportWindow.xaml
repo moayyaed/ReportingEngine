@@ -52,7 +52,7 @@
     </Window.Resources>
     <Grid>
         <c:BusyDecorator x:Name="busyDecorator" IsBusyIndicatorHidden="False">
-            <DocumentViewer Name="documentViewer" >
+            <DocumentViewer x:Name="documentViewer" >
                 <DocumentViewer.Style>
                     <Style TargetType="{x:Type DocumentViewer}">
                         <Setter Property="Template">
@@ -92,16 +92,8 @@
 
                                                 <Button Style="{StaticResource ReportButtonFooter}" Command="PreviousPage" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="&lt;"  />
 
-                                                <!--<TextBox Width="50" x:Name="PageNumber" Text="1" >
-                                                    <TextBox.InputBindings>
-                                                        <KeyBinding Key="Return" Command="GoToPage" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TextBox}}}"  CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" />
-                                                    </TextBox.InputBindings>
-                                                </TextBox>-->
 
-                                                <TextBox Width="50" x:Name="PageNumber" Text="1" BorderBrush="LightGray"  TextAlignment="Center" Padding="4" PreviewTextInput="PageNumber_PreviewTextInput" />
-                                                <!--<Button Content="Go"  Command="GoToPage" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-    CommandParameter="{Binding ElementName=PageNumber,Path=Text}" />-->
-
+                                                <TextBox x:Name="PageNumber" Width="50" Text="{Binding Path=MasterPageNumber, RelativeSource={RelativeSource AncestorType=DocumentViewer}, Mode=OneWay}" BorderBrush="LightGray"  TextAlignment="Center" Padding="4" PreviewTextInput="PageNumber_PreviewTextInput" KeyUp="PageNumber_KeyUp"  />
 
 
                                                 <Button Style="{StaticResource ReportButtonFooter}" Command="NextPage" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="&gt;"  />

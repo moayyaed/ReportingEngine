@@ -264,5 +264,34 @@ namespace ReportingEngine
         }
 
         #endregion
+
+        #region Page Change On Page Number set
+        
+        private void PageNumber_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    System.Windows.Controls.TextBox pageNumberTextBox = (System.Windows.Controls.TextBox)sender;
+                    int pageNumber = Convert.ToInt32(pageNumberTextBox.Text);
+                    if (pageNumber > documentViewer.PageCount)
+                    {
+                        MessageBox.Show("Page number is greater than the total page count", "Page count greater", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        documentViewer.GoToPage(pageNumber);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            }
+        }
+
+        #endregion
     }
 }
