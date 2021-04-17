@@ -235,7 +235,7 @@ namespace ReportingEngine
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    GenerateCSVFile(saveFileDialog.FileName);
+                    GenerateCSVFile2(saveFileDialog.FileName);
                     MessageBox.Show($"CSV File saved at {saveFileDialog.FileName}", "CSV File Saved", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
@@ -257,7 +257,25 @@ namespace ReportingEngine
             foreach (DataRow row in ReportRawData.Rows)
             {
                 IEnumerable<string> fields = row.ItemArray.Select(field => string.Concat("\"", field.ToString().Replace("\"", "\"\""), "\""));
+                
                 sb.AppendLine(string.Join(",", fields));
+            }
+
+            File.WriteAllText(csvOutputPath, sb.ToString());
+        }
+
+        public void GenerateCSVFile2(string csvOutputPath)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            IEnumerable<string> columnNames = ReportRawData.Columns.Cast<DataColumn>().Select(column => string.Concat("\"", column.ColumnName.Replace("\"", "\"\""), "\""));
+            sb.AppendLine(string.Join(";", columnNames));
+
+            foreach (DataRow row in ReportRawData.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => string.Concat("\"", field.ToString().Replace("\"", "\"\""), "\""));
+
+                sb.AppendLine(string.Join(";", fields));
             }
 
             File.WriteAllText(csvOutputPath, sb.ToString());
@@ -266,7 +284,7 @@ namespace ReportingEngine
         #endregion
 
         #region Page Change On Page Number set
-        
+
         private void PageNumber_KeyUp(object sender, KeyEventArgs e)
         {
             try
