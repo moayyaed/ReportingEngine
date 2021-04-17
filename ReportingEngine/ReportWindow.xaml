@@ -73,7 +73,7 @@
                                                 <Button Style="{StaticResource ReportButton}" Command="IncreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="+" />
                                                 <Button Style="{StaticResource ReportButton}" Command="DecreaseZoom" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="-" />
                                                 <Button x:Name="PDF" Style="{StaticResource ReportButton}" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="PDF" Click="PDF_Click"  />
-                                                <Button Style="{StaticResource ReportButton}" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="CSV"  />
+                                                <Button x:Name="CSV" Style="{StaticResource ReportButton}" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="CSV" Click="CSV_Click"  />
                                                 <Button Style="{StaticResource ReportButton}" Command="ApplicationCommands.Print" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="Print" />
                                                 <Button Style="{StaticResource ReportButton}" IsCancel="True" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Content="Exit"  />
 

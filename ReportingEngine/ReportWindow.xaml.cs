@@ -5,11 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.IO.Packaging;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Documents.Serialization;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -194,7 +193,7 @@ namespace ReportingEngine
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    PrintFile(saveFileDialog.FileName);
+                    GeneratePDFFile(saveFileDialog.FileName);
                     MessageBox.Show($"PDF File saved at {saveFileDialog.FileName}", "PDF File Saved", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
@@ -206,9 +205,9 @@ namespace ReportingEngine
             }
         }
 
-        public void PrintFile(string pdfOutputPath)
+        public void GeneratePDFFile(string pdfOutputPath)
         {
-           
+
             var memoryStream = new MemoryStream();
             XpsSerializerFactory serializerFactory = new XpsSerializerFactory();
             SerializerWriter serializerWriter = serializerFactory.CreateSerializerWriter(memoryStream);
@@ -217,6 +216,51 @@ namespace ReportingEngine
 
             // Print to PDF
             PdfFilePrinter.PrintXpsToPdf(bytes, pdfOutputPath, "Document title");
+        }
+
+        #endregion
+
+        #region CSV Generation
+
+        private void CSV_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Title = "Save as CSV",
+                    DefaultExt = "csv",
+                    Filter = "CSV file (*.csv)|*.csv"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    GenerateCSVFile(saveFileDialog.FileName);
+                    MessageBox.Show($"CSV File saved at {saveFileDialog.FileName}", "CSV File Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error in PDF generation", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void GenerateCSVFile(string csvOutputPath)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            IEnumerable<string> columnNames = ReportRawData.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+            sb.AppendLine(string.Join(",", columnNames));
+
+            foreach (DataRow row in ReportRawData.Rows)
+            {
+                IEnumerable<string> fields = row.ItemArray.Select(field => string.Concat("\"", field.ToString().Replace("\"", "\"\""), "\""));
+                sb.AppendLine(string.Join(",", fields));
+            }
+
+            File.WriteAllText(csvOutputPath, sb.ToString());
         }
 
         #endregion
