@@ -262,7 +262,8 @@ namespace ReportingEngine
                 sb.AppendLine(string.Join(",", fields));
             }
 
-            File.WriteAllText(csvOutputPath, sb.ToString());
+            File.WriteAllText(csvOutputPath, sb.ToString(), Encoding.UTF8);
+
         }
 
         public void GenerateCSVFile2(string csvOutputPath)
@@ -279,7 +280,7 @@ namespace ReportingEngine
                 sb.AppendLine(string.Join(";", fields));
             }
 
-            File.WriteAllText(csvOutputPath, sb.ToString());
+            File.WriteAllText(csvOutputPath, sb.ToString(), Encoding.UTF8);
         }
 
         #endregion
