@@ -25,8 +25,8 @@ namespace ReportingEngine.UI
             };
 
             ReportingGenerator reportingGenerator = new ReportingGenerator();
-            reportingGenerator.GenerateReport(new Repository().GetData(), "My Report", DateTime.Now, "Hussain", PageSize.A4, Orientation.Vertical);
-           // reportingGenerator.GenerateReport(new Repository().GetData(), "میرا رپورٹ", DateTime.Now, "حسین", PageSize.A4, Orientation.Vertical, "رپورٹ نام", "رپورٹ تاریخ", "بنانے والا", headers);
+            //reportingGenerator.GenerateReport(new Repository().GetData(), "My Report", DateTime.Now, "Hussain", PageSize.A4, Orientation.Vertical);
+            reportingGenerator.GenerateReport(new Repository().GetData(), "میرا رپورٹ", DateTime.Now, "حسین", PageSize.A4, Orientation.Vertical, "رپورٹ نام", "رپورٹ تاریخ", "بنانے والا", headers);
 
         }
     }

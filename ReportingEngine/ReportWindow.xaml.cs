@@ -99,7 +99,8 @@ namespace ReportingEngine
                     DataTable reportDataTable = ReportRawData;
                     reportDataTable.TableName = "ReportData";
                     reportHeadersTable.Columns.Add();
-                    foreach (var header in ReportHeaders ?? ReportRawData.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList())
+                    ReportHeaders = ReportHeaders ?? ReportRawData.Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToList();
+                    foreach (var header in ReportHeaders)
                     {
                         reportHeadersTable.Rows.Add(header);
                     }
@@ -235,7 +236,7 @@ namespace ReportingEngine
 
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    GenerateCSVFile2(saveFileDialog.FileName);
+                    GenerateCSVFile(saveFileDialog.FileName);
                     MessageBox.Show($"CSV File saved at {saveFileDialog.FileName}", "CSV File Saved", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
@@ -251,13 +252,13 @@ namespace ReportingEngine
         {
             StringBuilder sb = new StringBuilder();
 
-            IEnumerable<string> columnNames = ReportRawData.Columns.Cast<DataColumn>().Select(column => column.ColumnName);
+            IEnumerable<string> columnNames = ReportHeaders.Select(column => string.Concat("\"", column.Replace("\"", "\"\""), "\""));
             sb.AppendLine(string.Join(",", columnNames));
 
             foreach (DataRow row in ReportRawData.Rows)
             {
                 IEnumerable<string> fields = row.ItemArray.Select(field => string.Concat("\"", field.ToString().Replace("\"", "\"\""), "\""));
-                
+
                 sb.AppendLine(string.Join(",", fields));
             }
 
@@ -268,7 +269,7 @@ namespace ReportingEngine
         {
             StringBuilder sb = new StringBuilder();
 
-            IEnumerable<string> columnNames = ReportRawData.Columns.Cast<DataColumn>().Select(column => string.Concat("\"", column.ColumnName.Replace("\"", "\"\""), "\""));
+            IEnumerable<string> columnNames = ReportHeaders.Select(column => string.Concat("\"", column.Replace("\"", "\"\""), "\""));
             sb.AppendLine(string.Join(";", columnNames));
 
             foreach (DataRow row in ReportRawData.Rows)
